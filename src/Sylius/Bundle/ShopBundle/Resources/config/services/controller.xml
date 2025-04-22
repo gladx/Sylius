@@ -55,6 +55,7 @@
             <argument type="service" id="sylius.context.cart" />
             <argument type="service" id="sylius.factory.cart_item" />
             <argument type="service" id="sylius.factory.add_to_cart_command" />
+            <argument type="service" id="sylius.checker.inventory.availability" />
 
             <tag name="controller.service_arguments" />
         </service>

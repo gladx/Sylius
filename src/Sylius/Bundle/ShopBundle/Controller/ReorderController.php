@@ -18,6 +18,7 @@ use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderItemRepository;
 use Sylius\Bundle\OrderBundle\Factory\AddToCartCommandFactoryInterface;
 use Sylius\Component\Core\Factory\CartItemFactoryInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Inventory\Checker\AvailabilityCheckerInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Order\SyliusCartEvents;
 use Sylius\Resource\Symfony\EventDispatcher\GenericEvent;
@@ -38,6 +39,7 @@ final class ReorderController
         private readonly CartContextInterface $cartContext,
         private readonly CartItemFactoryInterface $cartItemFactory,
         private readonly AddToCartCommandFactoryInterface $addToCartCommandFactory,
+        private readonly AvailabilityCheckerInterface $orderItemAvailabilityChecker
     ) {
     }
 
@@ -58,6 +60,12 @@ final class ReorderController
         if (null === $productVariant) {
             $flashBag->add('error', 'sylius.reorder.add_fail_varient_not_found');
 
+            return $this->redirectToReferer($request);
+        }
+
+        $product = $productVariant->getProduct();
+        if (!$product->isEnabled() || !$productVariant->isEnabled() || !$this->orderItemAvailabilityChecker->isStockSufficient($productVariant, 1)) {
+            $flashBag->add('error', 'sylius.reorder.add_fail_not_available');
             return $this->redirectToReferer($request);
         }
 
