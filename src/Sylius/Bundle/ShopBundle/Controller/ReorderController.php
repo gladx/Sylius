@@ -49,16 +49,16 @@ final class ReorderController
         /** @var OrderItemInterface|null $orderItem */
         $orderItem = $this->orderItemRepository->find($itemId);
         if (null === $orderItem) {
-            $flashBag->add('error', 'item not found');
+            $flashBag->add('error', 'sylius.reorder.add_fail_item_not_found');
 
-            return new RedirectResponse($request->headers->get('referer'));
+            return $this->redirectToReferer($request);
         }
 
         $productVariant = $orderItem->getVariant();
         if (null === $productVariant) {
-            $flashBag->add('error', 'varient not found');
+            $flashBag->add('error', 'sylius.reorder.add_fail_varient_not_found');
 
-            return new RedirectResponse($request->headers->get('referer'));
+            return $this->redirectToReferer($request);
         }
 
         $cart = $this->cartContext->getCart();
@@ -70,13 +70,22 @@ final class ReorderController
             $cartItem,
         );
 
-        // copy from AddToCartFormComponent
         $this->eventDispatcher->dispatch(new GenericEvent($addToCartCommand), SyliusCartEvents::CART_ITEM_ADD);
         $this->manager->persist($addToCartCommand->getCart());
         $this->manager->flush();
 
-        $flashBag->add('success', 'Item has been added to cart by reorderd');
+        $flashBag->add('success', 'sylius.reorder.add_successfull');
 
         return new RedirectResponse($this->router->generate('sylius_shop_cart_summary'));
+    }
+
+    private function redirectToReferer(Request $request): RedirectResponse
+    {
+        $referer = $request->headers->get('referer');
+        if ($referer === null) {
+            return new RedirectResponse($this->router->generate('sylius_shop_account_order_index'));
+        }
+
+        return new RedirectResponse($referer);
     }
 }

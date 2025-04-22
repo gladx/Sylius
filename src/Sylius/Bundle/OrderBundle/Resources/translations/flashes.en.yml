@@ -8,3 +8,8 @@ sylius:
         not_recalculated: 'Due to invalid values in your cart, it has not been recalculated.'
         remove_item: 'Item has been removed from cart'
         save: 'The cart has been successfully updated'
+    reorder:
+        add_successfull: 'Item has been added to cart by reorderd'
+        add_fail_item_not_found: 'Item not found'
+        add_fail_varient_not_found: 'Varient not found'
+
