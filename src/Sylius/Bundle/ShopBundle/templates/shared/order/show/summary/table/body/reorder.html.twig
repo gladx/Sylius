@@ -1,5 +1,7 @@
 {% import '@SyliusShop/shared/buttons.html.twig' as buttons %}
 
+{% if app.request.attributes.get('_route') != 'sylius_shop_checkout_complete' %}
 <td>
-    {{ buttons.default(path('sylius_shop_reorder_request', {'itemId': hookable_metadata.context.item.id}), 'Reorder', null, 'tabler:repeat', 'btn btn-sm btn-primary') }}
+        {{ buttons.default(path('sylius_shop_reorder_request', {'itemId': hookable_metadata.context.item.id}), 'Reorder', null, 'tabler:repeat', 'btn btn-sm btn-primary') }}
 </td>
+{% endif %}
