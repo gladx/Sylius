@@ -46,5 +46,17 @@
 
             <tag name="controller.service_arguments" />
         </service>
+
+        <service id="sylius_shop.controller.reorder" class="Sylius\Bundle\ShopBundle\Controller\ReorderController">
+            <argument type="service" id="router" />
+            <argument type="service" id="sylius.repository.order_item" />
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="sylius.context.cart" />
+            <argument type="service" id="sylius.factory.cart_item" />
+            <argument type="service" id="sylius.factory.add_to_cart_command" />
+
+            <tag name="controller.service_arguments" />
+        </service>
     </services>
 </container>

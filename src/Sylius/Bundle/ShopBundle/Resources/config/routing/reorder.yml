@@ -1,0 +1,8 @@
+# This file is a part of the Sylius package.
+# (c) Sylius Sp. z o.o.
+
+sylius_shop_reorder_request:
+    path: /{itemId}
+    methods: [GET, POST]
+    defaults:
+        _controller: sylius_shop.controller.reorder::requestAction

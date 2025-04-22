@@ -65,6 +65,9 @@ sylius_twig_hooks:
                 configuration:
                     label: 'item'
                 priority: 300
+            reorder:
+                template: "@SyliusShop/shared/order/show/summary/table/header/reorder.html.twig"
+                priority: 250
             unit_price:
                 template: "@SyliusShop/shared/order/show/summary/table/header/item.html.twig"
                 configuration:
@@ -89,6 +92,9 @@ sylius_twig_hooks:
             item:
                 template: "@SyliusShop/shared/order/show/summary/table/body/item.html.twig"
                 priority: 300
+            reorder:
+                template: "@SyliusShop/shared/order/show/summary/table/body/reorder.html.twig"
+                priority: 250
             unit_price:
                 template: "@SyliusShop/shared/order/show/summary/table/body/unit_price.html.twig"
                 priority: 200

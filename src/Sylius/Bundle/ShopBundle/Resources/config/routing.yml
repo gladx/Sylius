@@ -38,6 +38,10 @@ sylius_shop_contact_request:
     resource: "@SyliusShopBundle/Resources/config/routing/contact.yml"
     prefix: /contact
 
+sylius_shop_reorder_request:
+    resource: "@SyliusShopBundle/Resources/config/routing/reorder.yml"
+    prefix: /reorder
+
 sylius_shop_order:
     resource: "@SyliusShopBundle/Resources/config/routing/order.yml"
     prefix: /order
