@@ -18,6 +18,7 @@ use Sylius\Bundle\CoreBundle\Doctrine\ORM\OrderItemRepository;
 use Sylius\Bundle\OrderBundle\Factory\AddToCartCommandFactoryInterface;
 use Sylius\Component\Core\Factory\CartItemFactoryInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Inventory\Checker\AvailabilityCheckerInterface;
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Order\SyliusCartEvents;
@@ -31,6 +32,10 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class ReorderController
 {
+    /**
+     * @param OrderItemRepository<OrderItemInterface> $orderItemRepository
+     * @param CartItemFactoryInterface<OrderItemInterface> $cartItemFactory
+     */
     public function __construct(
         private readonly RouterInterface $router,
         private readonly OrderItemRepository $orderItemRepository,
@@ -39,7 +44,7 @@ final class ReorderController
         private readonly CartContextInterface $cartContext,
         private readonly CartItemFactoryInterface $cartItemFactory,
         private readonly AddToCartCommandFactoryInterface $addToCartCommandFactory,
-        private readonly AvailabilityCheckerInterface $orderItemAvailabilityChecker
+        private readonly AvailabilityCheckerInterface $orderItemAvailabilityChecker,
     ) {
     }
 
@@ -66,11 +71,14 @@ final class ReorderController
         $product = $productVariant->getProduct();
         if (!$product->isEnabled() || !$productVariant->isEnabled() || !$this->orderItemAvailabilityChecker->isStockSufficient($productVariant, 1)) {
             $flashBag->add('error', 'sylius.reorder.add_fail_not_available');
+
             return $this->redirectToReferer($request);
         }
 
         $cart = $this->cartContext->getCart();
-        $cartItem = $this->cartItemFactory->createForProduct($productVariant->getProduct());
+        /** @var ProductInterface $coreProduct */
+        $coreProduct = $productVariant->getProduct();
+        $cartItem = $this->cartItemFactory->createForProduct($coreProduct);
         $cartItem->setVariant($productVariant);
         $cartItem->setUnitPrice($orderItem->getUnitPrice());
         $addToCartCommand = $this->addToCartCommandFactory->createWithCartAndCartItem(

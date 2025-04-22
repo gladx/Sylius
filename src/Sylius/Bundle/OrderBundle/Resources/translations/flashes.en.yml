@@ -12,4 +12,5 @@ sylius:
         add_successful: 'Item has been added to cart by reordered'
         add_fail_item_not_found: 'Item not found'
         add_fail_variant_not_found: 'Variant not found'
+        add_fail_not_available: 'Product is not available'
 
