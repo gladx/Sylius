@@ -58,7 +58,7 @@ final class ReorderController
 
         $productVariant = $orderItem->getVariant();
         if (null === $productVariant) {
-            $flashBag->add('error', 'sylius.reorder.add_fail_varient_not_found');
+            $flashBag->add('error', 'sylius.reorder.add_fail_variant_not_found');
 
             return $this->redirectToReferer($request);
         }
@@ -82,7 +82,7 @@ final class ReorderController
         $this->manager->persist($addToCartCommand->getCart());
         $this->manager->flush();
 
-        $flashBag->add('success', 'sylius.reorder.add_successfull');
+        $flashBag->add('success', 'sylius.reorder.add_successful');
 
         return new RedirectResponse($this->router->generate('sylius_shop_cart_summary'));
     }
